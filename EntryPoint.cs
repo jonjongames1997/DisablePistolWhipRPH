@@ -4,7 +4,7 @@ using System.Reflection;
 using Rage;
 using Rage.Attributes;
 
-[assembly: Plugin("Disable Pistol Whip", Author = "JM MM", Description = "Disables pistol-whip melee attacks while holding a pistol.")]
+[assembly: Plugin("Disable Pistol Whip", Author = "JM Modifications", Description = "Disables pistol-whip melee attacks while holding a pistol.")]
 
 namespace DisablePistolWhip
 {
@@ -13,11 +13,14 @@ namespace DisablePistolWhip
         private static readonly string ConfigPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? ".", "DisablePistolWhip.ini");
 
         public static bool Enabled { get; private set; } = true;
+        public static string ToggleKeyName { get; private set; } = "F7";
+        public static bool NotificationsEnabled { get; private set; } = true;
+        private static DateTime _lastTogglePress = DateTime.MinValue;
+        private const int ToggleDebounceMs = 500;
 
         public static void Main()
         {
             Game.LogTrivial("[Disable Pistol Whip] Plugin loaded.");
-            // Ensure an INI exists with defaults and helpful comments
             EnsureConfigExists();
             LoadConfig();
             ShowNotification($"Disable Pistol Whip: {(Enabled ? "Enabled" : "Disabled")} (Console toggle: dpw)");
@@ -54,6 +57,37 @@ namespace DisablePistolWhip
 
                     var equipped = inv.EquippedWeapon;
                     WeaponHash currentHash = equipped != null ? equipped.Hash : 0;
+
+                    try
+                    {
+                        var keysType = Type.GetType("System.Windows.Forms.Keys, System.Windows.Forms");
+                        if (keysType != null)
+                        {
+                            try
+                            {
+                                var parsedKey = Enum.Parse(keysType, ToggleKeyName, true);
+                                var mi = typeof(Game).GetMethod("IsKeyDown", new[] { keysType });
+                                if (mi != null)
+                                {
+                                    var result = mi.Invoke(null, new[] { parsedKey });
+                                    if (result is bool && (bool)result && (DateTime.UtcNow - _lastTogglePress).TotalMilliseconds > ToggleDebounceMs)
+                                    {
+                                        _lastTogglePress = DateTime.UtcNow;
+                                        ToggleEnabled();
+                                        FiberSleep(300);
+                                    }
+                                }
+                            }
+                            catch
+                            {
+                                // ignore parse/invoke errors
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        // ignore if reflection fails
+                    }
 
                     if (Enabled && IsPistol(currentHash))
                     {
@@ -140,6 +174,16 @@ namespace DisablePistolWhip
                         if (bool.TryParse(val, out parsed))
                             Enabled = parsed;
                     }
+                    else if (key.Equals("ToggleKey", StringComparison.OrdinalIgnoreCase) || key.Equals("ToggleKeyName", StringComparison.OrdinalIgnoreCase))
+                    {
+                        ToggleKeyName = val;
+                    }
+                    else if (key.Equals("Notifications", StringComparison.OrdinalIgnoreCase) || key.Equals("NotificationsEnabled", StringComparison.OrdinalIgnoreCase))
+                    {
+                        bool parsed;
+                        if (bool.TryParse(val, out parsed))
+                            NotificationsEnabled = parsed;
+                    }
                 }
             }
             catch (Exception ex)
@@ -157,7 +201,11 @@ namespace DisablePistolWhip
                 {
                     "; DisablePistolWhip configuration",
                     "; Enabled = true/false",
-                    "Enabled=" + Enabled.ToString().ToLower()
+                    "Enabled=" + Enabled.ToString().ToLower(),
+                    "; ToggleKey = name of key from System.Windows.Forms.Keys (e.g. F7)",
+                    "ToggleKey=" + ToggleKeyName,
+                    "; Notifications = true/false (show in-game notifications)",
+                    "Notifications=" + NotificationsEnabled.ToString().ToLower()
                 };
 
                 File.WriteAllLines(ConfigPath, lines);
@@ -192,7 +240,14 @@ namespace DisablePistolWhip
         {
             try
             {
-                Game.DisplayNotification(text);
+                if (NotificationsEnabled)
+                {
+                    Game.DisplayNotification(text);
+                }
+                else
+                {
+                    Game.LogTrivial("[Disable Pistol Whip] " + text);
+                }
             }
             catch
             {
@@ -200,13 +255,58 @@ namespace DisablePistolWhip
             }
         }
 
-        // Public API for console commands to toggle the mod
         public static void ToggleEnabled()
         {
             Enabled = !Enabled;
             SaveConfig();
             ShowNotification($"Disable Pistol Whip: {(Enabled ? "Enabled" : "Disabled")}");
             Game.LogTrivial($"[Disable Pistol Whip] Toggled to: {Enabled}");
+        }
+
+        public static void SetToggleKeyName(string keyName)
+        {
+            if (string.IsNullOrWhiteSpace(keyName))
+                return;
+
+            var trimmed = keyName.Trim();
+            // Validate against System.Windows.Forms.Keys enum if available at runtime
+            try
+            {
+                var keysType = Type.GetType("System.Windows.Forms.Keys, System.Windows.Forms");
+                if (keysType != null)
+                {
+                    try
+                    {
+                        // will throw if not valid
+                        Enum.Parse(keysType, trimmed, true);
+                        ToggleKeyName = trimmed;
+                        SaveConfig();
+                        ShowNotification($"Toggle key set to: {ToggleKeyName}");
+                    }
+                    catch
+                    {
+                        Game.LogTrivial($"[Disable Pistol Whip] Invalid toggle key name: {trimmed}");
+                        ShowNotification($"Invalid key: {trimmed}");
+                    }
+                }
+                else
+                {
+                    ToggleKeyName = trimmed;
+                    SaveConfig();
+                    ShowNotification($"Toggle key set to: {ToggleKeyName} (unvalidated)");
+                }
+            }
+            catch (Exception ex)
+            {
+                Game.LogTrivial($"[Disable Pistol Whip] SetToggleKeyName error: {ex.Message}");
+            }
+        }
+
+        public static void SetNotificationsEnabled(bool enabled)
+        {
+            NotificationsEnabled = enabled;
+            SaveConfig();
+            ShowNotification($"Notifications {(NotificationsEnabled ? "enabled" : "disabled")}");
         }
 
         private static void FiberSleep(int ms)
