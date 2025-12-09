@@ -25,6 +25,7 @@ namespace DisablePistolWhip
         public static void Main()
         {
             Game.LogTrivial("[Disable Pistol Whip] Plugin loaded.");
+            Game.DisplayNotification("web_molly", "web_molly", "Stella Dimentrescu", "Disable Pistol Whip", "by JM Modifications. Disable Pistol Whip ~g~successfully~w~ loaded. BE A THUG ABOUT IT, MAH BOI.");
             EnsureConfigExists();
             LoadConfig();
             ShowNotification($"Disable Pistol Whip: {(Enabled ? "Enabled" : "Disabled")} (Console toggle: dpw)");
