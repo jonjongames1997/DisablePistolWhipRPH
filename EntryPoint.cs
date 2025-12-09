@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Windows.Forms;
 using Rage;
 using Rage.Attributes;
+using YOUR_NAMESPACE;
 
 [assembly: Plugin("Disable Pistol Whip", Author = "JM Modifications", Description = "Disables pistol-whip melee attacks while holding a pistol.")]
 
@@ -10,6 +12,8 @@ namespace DisablePistolWhip
 {
     public static class EntryPoint
     {
+        internal static readonly Config UserConfig = new();
+
         private static readonly string ConfigPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? ".", "DisablePistolWhip.ini");
 
         public static bool Enabled { get; private set; } = true;
@@ -26,7 +30,21 @@ namespace DisablePistolWhip
             ShowNotification($"Disable Pistol Whip: {(Enabled ? "Enabled" : "Disabled")} (Console toggle: dpw)");
 
             GameFiber.StartNew(MainLoop, "DisablePistolWhipFiber");
+
+            IniReflector<Config> iniReflector = new("Plugins/DisablePistolWhip.ini");
+            iniReflector.Read(UserConfig, true);
+
+            while (true)
+            {
+                GameFiber.Yield();
+
+                if (Game.IsKeyDown(UserConfig.ToggleKey))
+                {
+                    ShowNotification($"Disable Pistol Whip: {(Enabled ? "Enabled" : "Disabled")} (Console toggle: dpw)");
+                }
+            }
         }
+
 
         private static void MainLoop()
         {
