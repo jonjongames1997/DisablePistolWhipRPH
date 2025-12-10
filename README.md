@@ -51,7 +51,7 @@ License
 - GPL V3 Licennse
 
 Credits
-- PlMarcelWRLD - IniReflector code used in this project
+- MarcelWRLD - IniReflector code used in this project
 
 Contact
 - Use the project issue tracker for support.
