@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 using System.Windows.Forms;
-using YOUR_NAMESPACE;
+using DisablePistolWhip;
 
 namespace DisablePistolWhip
 {
@@ -10,7 +10,7 @@ namespace DisablePistolWhip
 
     internal class Config
     {
-        [IniReflectorValue(sectionName: "Keybinds", defaultValue: "F7", description: "The main key to toggle the mod on/off while mod is active/loaded in game")]
+        [IniReflectorValue(sectionName: "Keybinds", defaultValue: "F7", description: "The main key to toggle the mod off while mod is active/loaded in game")]
         internal Keys ToggleKey;
 
         [IniReflectorValue(sectionName: "Settings", defaultValue: "true", description: "If true, the mod will start enabled when loaded")]
@@ -18,5 +18,8 @@ namespace DisablePistolWhip
 
         [IniReflectorValue(sectionName: "Settings", defaultValue: "true", description: "If true, a notification will be shown when the mod is toggled on/off")]
         internal bool ShowNotification;
+
+        [IniReflectorValue(sectionName: "Settings", defaultValue: "Pistol,CombatPistol,APPistol", description: "Comma-separated list of WeaponHash names for which melee will be disabled (e.g. Pistol,CombatPistol,SMG)")]
+        internal string DisabledWeapons;
     }
 }
