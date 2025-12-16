@@ -1,8 +1,9 @@
 D:\Script Projects\DisablePistolWhip\bin\Debug\DisablePistolWhip.dll
 D:\Script Projects\DisablePistolWhip\bin\Debug\DisablePistolWhip.pdb
-D:\Script Projects\DisablePistolWhip\bin\Debug\RagePluginHookSDK.dll
 D:\Script Projects\DisablePistolWhip\obj\Debug\DisablePistolWhip.csproj.AssemblyReference.cache
 D:\Script Projects\DisablePistolWhip\obj\Debug\DisablePistolWhip.csproj.CoreCompileInputs.cache
-D:\Script Projects\DisablePistolWhip\obj\Debug\DisableP.98432967.Up2Date
 D:\Script Projects\DisablePistolWhip\obj\Debug\DisablePistolWhip.dll
 D:\Script Projects\DisablePistolWhip\obj\Debug\DisablePistolWhip.pdb
+D:\Script Projects\DisablePistolWhip\bin\Debug\RagePluginHook.dll
+D:\Script Projects\DisablePistolWhip\bin\Debug\RagePluginHook.xml
+D:\Script Projects\DisablePistolWhip\obj\Debug\DisableP.98432967.Up2Date

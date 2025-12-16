@@ -6,21 +6,22 @@ Key features
 - Disable light/heavy/alternate melee controls when a pistol is equipped
 - Toggle at runtime via a console command or configurable keyboard key
 - Simple INI-based configuration created automatically on first run
-- No hard dependency on `System.Windows.Forms` â€” key handling validated at runtime when available
+- No hard dependency on `System.Windows.Forms` — key handling validated at runtime when available
 
 Requirements
 - RagePluginHook
 
 Installation
-
-Drag and Drop "plugins" folder into main gta directory
+1. Build the project or download the compiled DLL.
+2. Place the DLL into your scripts/mods folder used by your Rage scripting loader.
+3. Launch the game; the plugin will create `DisablePistolWhip.ini` next to the DLL on first run.
 
 Usage
 - By default the plugin is enabled. When a pistol is equipped the plugin disables melee attack controls so the player cannot pistol-whip while holding a pistol.
 - Console commands (type in the in-game console):
-  - `dpw` â€” Toggle the plugin on or off (state is persisted to `DisablePistolWhip.ini`).
-  - `dpw_setkey <KeyName>` â€” Change the keyboard toggle key (e.g. `dpw_setkey F8`). The key is stored as a string and validated at runtime if possible.
-  - `dpw_notify <true|false>` â€” Enable or disable in-game notifications.
+  - `dpw` — Toggle the plugin on or off (state is persisted to `DisablePistolWhip.ini`).
+  - `dpw_setkey <KeyName>` — Change the keyboard toggle key (e.g. `dpw_setkey F8`). The key is stored as a string and validated at runtime if possible.
+  - `dpw_notify <true|false>` — Enable or disable in-game notifications.
 
 Configuration
 - The plugin stores settings in `DisablePistolWhip.ini` next to the plugin DLL. Example contents:
@@ -48,10 +49,10 @@ Contributing
 - Want to add features or fix a bug? Fork the repository, make changes, and open a pull request. Please include a short description of the change and, if appropriate, a changelog entry.
 
 License
-- GPL V3 Licennse
+- No license file is included in this repository. Before publishing or distributing, add a license (MIT, Apache-2.0, etc.) as appropriate.
 
 Credits
-- MarcelWRLD - IniReflector code used in this project
+- Plugin author: project metadata (assembly attributes)
 
 Contact
-- Use the project issue tracker for support.
+- Use the project issue tracker or repository contact information for questions and support.
