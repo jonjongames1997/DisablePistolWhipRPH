@@ -1,10 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Rage;
 using Rage.Attributes;
-using YOUR_NAMESPACE;
+using DisablePistolWhip;
 
 [assembly: Plugin("Disable Pistol Whip", Author = "JM Modifications", Description = "Disables pistol-whip melee attacks while holding a pistol.")]
 
@@ -21,11 +22,13 @@ namespace DisablePistolWhip
         public static bool NotificationsEnabled { get; private set; } = true;
         private static DateTime _lastTogglePress = DateTime.MinValue;
         private const int ToggleDebounceMs = 500;
+        private static readonly System.Collections.Generic.HashSet<WeaponHash> DisabledWeaponHashes = new System.Collections.Generic.HashSet<WeaponHash>();
+        private static string DisabledWeaponsRaw = null;
 
         public static void Main()
         {
             Game.LogTrivial("[Disable Pistol Whip] Plugin loaded.");
-            Game.DisplayNotification("web_molly", "web_molly", "Stella Dimentrescu", "Disable Pistol Whip", "by JM Modifications. Disable Pistol Whip ~g~successfully~w~ loaded. BE A THUG ABOUT IT, MAH BOI.");
+            Game.DisplayNotification("char_molly", "char_molly", "Stella Dimentrescu", "Disable Pistol Whip", "by JM Modifications. Disable Pistol Whip ~g~successfully~w~ loaded. BE A THUG ABOUT IT, MAH BOI.");
             EnsureConfigExists();
             LoadConfig();
             ShowNotification($"Disable Pistol Whip: {(Enabled ? "Enabled" : "Disabled")} (Console toggle: dpw)");
@@ -108,7 +111,29 @@ namespace DisablePistolWhip
                         // ignore if reflection fails
                     }
 
-                    if (Enabled && IsPistol(currentHash))
+                    // update disabled weapon set if config changed
+                    if (DisabledWeaponsRaw != UserConfig.DisabledWeapons)
+                    {
+                        DisabledWeaponsRaw = UserConfig.DisabledWeapons;
+                        DisabledWeaponHashes.Clear();
+                        if (!string.IsNullOrWhiteSpace(DisabledWeaponsRaw))
+                        {
+                            var parts = DisabledWeaponsRaw.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                            foreach (var p in parts)
+                            {
+                                var name = p.Trim();
+                                if (string.IsNullOrEmpty(name)) continue;
+                                // allow groups like 'smgs', 'rifles', 'shotguns'
+                                foreach (var candidate in ExpandWeaponEntry(name))
+                                {
+                                    if (Enum.TryParse<WeaponHash>(candidate, true, out var h))
+                                        DisabledWeaponHashes.Add(h);
+                                }
+                            }
+                        }
+                    }
+
+                    if (UserConfig.StartEnabled && DisabledWeaponHashes.Contains(currentHash))
                     {
                         Game.DisableControlAction(0, GameControl.MeleeAttackLight, true);
                         Game.DisableControlAction(0, GameControl.MeleeAttackHeavy, true);
@@ -148,7 +173,15 @@ namespace DisablePistolWhip
                 "RevolverMk2",
                 "DoubleActionRevolver",
                 "NavyRevolver",
-                "CeramicPistol"
+                "CeramicPistol",
+                "StunGun",
+                "FlareGun",
+                "Pistol50",
+                "MachinePistol",
+                "MicroSMG",
+                "SMG",
+                "SMGMk2",
+                "AssaultSMG"
             };
 
             foreach (var name in pistolNames)
@@ -162,7 +195,43 @@ namespace DisablePistolWhip
 
         private static bool IsPistol(WeaponHash hash)
         {
-            return PistolHashes.Contains(hash);
+            return PistolHashes.Contains(hash) || DisabledWeaponHashes.Contains(hash);
+        }
+
+        // Expand a config entry: either a category or a specific enum name
+        private static IEnumerable<string> ExpandWeaponEntry(string entry)
+        {
+            if (string.IsNullOrWhiteSpace(entry)) yield break;
+
+            var lower = entry.Trim().ToLowerInvariant();
+            switch (lower)
+            {
+                case "pistols":
+                case "pistol":
+                    yield return "Pistol";
+                    yield break;
+                case "smgs":
+                case "smg":
+                    yield return "MicroSMG";
+                    yield return "SMG";
+                    yield return "SMGMk2";
+                    yield return "AssaultSMG";
+                    yield break;
+                case "rifles":
+                case "assault":
+                    yield return "CarbineRifle";
+                    yield return "AssaultRifle";
+                    yield return "SpecialCarbine";
+                    yield break;
+                case "shotguns":
+                    yield return "PumpShotgun";
+                    yield return "SawnOffShotgun";
+                    yield return "BullpupShotgun";
+                    yield break;
+                default:
+                    yield return entry.Trim();
+                    yield break;
+            }
         }
 
         private static void LoadConfig()
@@ -224,7 +293,9 @@ namespace DisablePistolWhip
                     "; ToggleKey = name of key from System.Windows.Forms.Keys (e.g. F7)",
                     "ToggleKey=" + ToggleKeyName,
                     "; Notifications = true/false (show in-game notifications)",
-                    "Notifications=" + NotificationsEnabled.ToString().ToLower()
+                    "Notifications=" + NotificationsEnabled.ToString().ToLower(),
+                    "; DisabledWeapons = comma-separated list of weapon names or categories (pistol, smg, rifles, shotguns)",
+                    "DisabledWeapons=" + UserConfig.DisabledWeapons,
                 };
 
                 File.WriteAllLines(ConfigPath, lines);
