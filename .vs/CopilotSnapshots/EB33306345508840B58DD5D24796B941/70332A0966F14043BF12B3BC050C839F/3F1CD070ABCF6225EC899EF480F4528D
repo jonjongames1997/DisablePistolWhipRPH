@@ -1,0 +1,12 @@
+﻿using Rage;
+using Rage.Attributes;
+
+namespace DisablePistolWhip
+{
+    public static class ConsoleCommand
+    {
+        [ConsoleCommand(Description = "Toggles the Disable Pistol Whip mod on or off.", Name = "Disable Pistol Whip")]
+
+
+    }
+}

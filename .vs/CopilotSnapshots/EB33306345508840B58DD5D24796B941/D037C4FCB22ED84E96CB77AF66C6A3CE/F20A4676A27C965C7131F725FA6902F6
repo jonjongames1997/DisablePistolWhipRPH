@@ -1,0 +1,93 @@
+﻿using System;
+using Rage;
+using Rage.Attributes;
+
+[assembly: Plugin("Disable Pistol Whip", Author = "YourName", Description = "Disables pistol-whip melee attacks while holding a pistol.")]
+
+public static class EntryPoint
+{
+    public static void Main()
+    {
+        Game.LogTrivial("[Disable Pistol Whip] Plugin loaded.");
+
+        GameFiber.StartNew(MainLoop, "DisablePistolWhipFiber");
+    }
+
+    private static void MainLoop()
+    {
+        // Keep a tight loop while active, but back off when player is not on foot or no weapon equipped
+        while (true)
+        {
+            try
+            {
+                Ped player = Game.LocalPlayer.Character;
+
+                if (player == null || !player.Exists())
+                {
+                    GameFiber.Sleep(500);
+                    continue;
+                }
+
+                if (player.IsDead || !player.IsOnFoot)
+                {
+                    GameFiber.Sleep(500);
+                    continue;
+                }
+
+                var inv = player.Inventory;
+                if (inv == null)
+                {
+                    GameFiber.Sleep(500);
+                    continue;
+                }
+
+                var equipped = inv.EquippedWeapon;
+                WeaponHash currentHash = equipped != null ? equipped.Hash : 0;
+
+                if (IsPistol(currentHash))
+                {
+                    Game.DisableControlAction(0, GameControl.MeleeAttackLight, true);
+                    Game.DisableControlAction(0, GameControl.MeleeAttackHeavy, true);
+                    Game.DisableControlAction(0, GameControl.MeleeAttackAlternate, true);
+
+                    // Check again next frame to keep action disabled while weapon remains a pistol
+                    GameFiber.Yield();
+                }
+                else
+                {
+                    // No pistol equipped: sleep a bit to reduce CPU usage
+                    GameFiber.Sleep(200);
+                }
+            }
+            catch (Exception ex)
+            {
+                Game.LogTrivial($"[Disable Pistol Whip] Exception: {ex.Message}");
+                GameFiber.Sleep(500);
+            }
+        }
+    }
+
+    private static readonly System.Collections.Generic.HashSet<WeaponHash> PistolHashes =
+    new System.Collections.Generic.HashSet<WeaponHash>
+    {
+        WeaponHash.Pistol,
+        WeaponHash.PistolMk2,
+        WeaponHash.CombatPistol,
+        WeaponHash.APPistol,
+        WeaponHash.SNSPistol,
+        WeaponHash.SNSPistolMk2,
+        WeaponHash.HeavyPistol,
+        WeaponHash.VintagePistol,
+        WeaponHash.MarksmanPistol,
+        WeaponHash.Revolver,
+        WeaponHash.RevolverMk2,
+        WeaponHash.DoubleActionRevolver,
+        WeaponHash.NavyRevolver,
+        WeaponHash.CeramicPistol
+    };
+
+    private static bool IsPistol(WeaponHash hash)
+    {
+        return PistolHashes.Contains(hash);
+    }
+}

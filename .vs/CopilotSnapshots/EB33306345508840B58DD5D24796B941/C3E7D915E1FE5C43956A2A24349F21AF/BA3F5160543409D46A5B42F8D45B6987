@@ -1,0 +1,32 @@
+﻿using Rage;
+using System;
+
+namespace DisablePistolWhip
+{
+    internal class Config
+    {
+        internal static bool NotificationsEnabled { get; private set; } = true;
+        internal static string ToggleKeyName { get; private set; } = "F7";
+
+
+        internal void LoadConfig()
+        {
+            try
+            {
+                Game.LogTrivial("[Disable Pistol Whip] Loading configuration...");
+                var path = "Plugins\\DisablePistolWhip.ini";
+                var ini = new InitializationFile(path);
+                ini.Create();
+
+                NotificationsEnabled = ini.ReadBoolean("Settings", "NotificationsEnabled", true);
+                ToggleKeyName = ini.ReadString("Settings", "ToggleKeyName", "F7");
+                Game.LogTrivial("[Disable Pistol Whip] Configuration loaded.");
+            }
+            catch (Exception ex)
+            {
+                Game.LogTrivial($"[Disable Pistol Whip] Error loading configuration: {ex.Message}");
+                Game.LogTrivial($"[Disable Pistol Whip] Error loading configuration: {ex.StackTrace}");
+            }
+        }
+    }
+}

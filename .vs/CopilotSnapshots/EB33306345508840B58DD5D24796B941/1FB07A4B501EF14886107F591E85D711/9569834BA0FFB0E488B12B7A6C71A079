@@ -1,0 +1,180 @@
+﻿using System;
+using System.IO;
+using System.Reflection;
+using Rage;
+using Rage.Attributes;
+
+[assembly: Plugin("Disable Pistol Whip", Author = "JM Modifications", Description = "Disables pistol-whip melee attacks while holding a pistol.")]
+
+namespace DisablePistolWhip
+{
+    public static class EntryPoint
+    {
+        private static DateTime _lastTogglePress = DateTime.MinValue;
+        private const int ToggleDebounceMs = 500;
+
+        private static readonly System.Collections.Generic.HashSet<WeaponHash> PistolHashes = new System.Collections.Generic.HashSet<WeaponHash>
+        {
+            WeaponHash.Pistol,
+            WeaponHash.CombatPistol,
+            WeaponHash.APPistol,
+            WeaponHash.SNSPistol,
+            WeaponHash.HeavyPistol,
+            WeaponHash.VintagePistol,
+            WeaponHash.Revolver
+        };
+
+        public static void Main()
+        {
+            Game.LogTrivial("[Disable Pistol Whip] Plugin loaded.");
+            try { Game.DisplayNotification("web_molly", "web_molly", "Disable Pistol Whip", "", "Disable Pistol Whip loaded."); } catch { }
+
+            // Load configuration
+            Config.Load();
+            ShowNotification($"Disable Pistol Whip: {(Config.Enabled ? "Enabled" : "Disabled")} (Console: dpw)");
+
+            GameFiber.StartNew(MainLoop, "DisablePistolWhipFiber");
+        }
+
+        private static void MainLoop()
+        {
+            while (true)
+            {
+                try
+                {
+                    var player = Game.LocalPlayer.Character;
+                    if (player == null || !player.Exists() || player.IsDead || !player.IsOnFoot)
+                    {
+                        FiberSleep(500);
+                        continue;
+                    }
+
+                    var inv = player.Inventory;
+                    if (inv == null)
+                    {
+                        FiberSleep(500);
+                        continue;
+                    }
+
+                    var equipped = inv.EquippedWeapon;
+                    WeaponHash currentHash = equipped != null ? equipped.Hash : 0;
+
+                    // keyboard toggle
+                    TryHandleToggleKey();
+
+                    if (Config.Enabled && IsPistol(currentHash))
+                    {
+                        Game.DisableControlAction(0, GameControl.MeleeAttackLight, true);
+                        Game.DisableControlAction(0, GameControl.MeleeAttackHeavy, true);
+                        Game.DisableControlAction(0, GameControl.MeleeAttackAlternate, true);
+                        GameFiber.Yield();
+                    }
+                    else
+                    {
+                        FiberSleep(200);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Game.LogTrivial($"[Disable Pistol Whip] Exception: {ex.Message}");
+                    FiberSleep(500);
+                }
+            }
+        }
+
+        private static void TryHandleToggleKey()
+        {
+            try
+            {
+                var keyName = Config.ToggleKeyName;
+                if (string.IsNullOrEmpty(keyName))
+                    return;
+
+                var keysType = Type.GetType("System.Windows.Forms.Keys, System.Windows.Forms");
+                if (keysType == null)
+                    return;
+
+                var parsedKey = Enum.Parse(keysType, keyName, true);
+                var mi = typeof(Game).GetMethod("IsKeyDown", new[] { keysType });
+                if (mi == null)
+                    return;
+
+                var result = mi.Invoke(null, new[] { parsedKey });
+                if (result is bool && (bool)result && (DateTime.UtcNow - _lastTogglePress).TotalMilliseconds > ToggleDebounceMs)
+                {
+                    _lastTogglePress = DateTime.UtcNow;
+                    ToggleEnabled();
+                    FiberSleep(300);
+                }
+            }
+            catch { }
+        }
+
+        private static bool IsPistol(WeaponHash hash)
+        {
+            return PistolHashes.Contains(hash);
+        }
+
+        private static void ShowNotification(string text)
+        {
+            try
+            {
+                if (Config.NotificationsEnabled)
+                    Game.DisplayNotification(text);
+                else
+                    Game.LogTrivial("[Disable Pistol Whip] " + text);
+            }
+            catch { Game.LogTrivial("[Disable Pistol Whip] " + text); }
+        }
+
+        public static void ToggleEnabled()
+        {
+            Config.Enabled = !Config.Enabled;
+            Config.Save();
+            ShowNotification($"Disable Pistol Whip: {(Config.Enabled ? "Enabled" : "Disabled")}");
+            Game.LogTrivial($"[Disable Pistol Whip] Toggled to: {Config.Enabled}");
+        }
+
+        public static void SetToggleKeyName(string keyName)
+        {
+            if (string.IsNullOrWhiteSpace(keyName))
+                return;
+
+            var trimmed = keyName.Trim();
+            try
+            {
+                var keysType = Type.GetType("System.Windows.Forms.Keys, System.Windows.Forms");
+                if (keysType != null)
+                {
+                    // validate
+                    Enum.Parse(keysType, trimmed, true);
+                    Config.ToggleKeyName = trimmed;
+                    Config.Save();
+                    ShowNotification($"Toggle key set to: {trimmed}");
+                }
+                else
+                {
+                    Config.ToggleKeyName = trimmed;
+                    Config.Save();
+                    ShowNotification($"Toggle key set to: {trimmed} (unvalidated)");
+                }
+            }
+            catch
+            {
+                ShowNotification($"Invalid key: {trimmed}");
+            }
+        }
+
+        public static void SetNotificationsEnabled(bool enabled)
+        {
+            Config.NotificationsEnabled = enabled;
+            Config.Save();
+            ShowNotification($"Notifications {(enabled ? "enabled" : "disabled")}");
+        }
+
+        private static void FiberSleep(int ms)
+        {
+            try { GameFiber.Sleep(ms); } catch { System.Threading.Thread.Sleep(ms); }
+        }
+    }
+}

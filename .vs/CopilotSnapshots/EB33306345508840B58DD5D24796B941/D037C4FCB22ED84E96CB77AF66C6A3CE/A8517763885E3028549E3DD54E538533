@@ -1,0 +1,74 @@
+﻿using System;
+using Rage;
+using Rage.Attributes;
+
+[assembly: Plugin("Disable Pistol Whip", Author = "YourName", Description = "Disables pistol-whip melee attacks while holding a pistol.")]
+
+public static class EntryPoint
+{
+    public static void Main()
+    {
+        Game.LogTrivial("[Disable Pistol Whip] Plugin loaded.");
+
+        GameFiber.StartNew(MainLoop, "DisablePistolWhipFiber");
+    }
+
+    private static void MainLoop()
+    {
+        while (true)
+        {
+            GameFiber.Yield();
+
+            try
+            {
+                Ped player = Game.LocalPlayer.Character;
+                if (!player || !player.Exists() || player.IsDead || !player.IsOnFoot)
+                    continue;
+
+                var inv = player.Inventory;
+                if (inv == null)
+                    continue;
+
+                var equipped = inv.EquippedWeapon;
+                WeaponHash currentHash = equipped.Hash; 
+
+                if (IsPistol(currentHash))
+                {
+                    Game.DisableControlAction(0, GameControl.MeleeAttackLight, true);
+                    Game.DisableControlAction(0, GameControl.MeleeAttackHeavy, true);
+                    Game.DisableControlAction(0, GameControl.MeleeAttackAlternate, true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Game.LogTrivial($"[Disable Pistol Whip] Exception: {ex}");
+                GameFiber.Sleep(500);
+            }
+        }
+    }
+
+    private static bool IsPistol(WeaponHash hash)
+    {
+        switch (hash)
+        {
+            case WeaponHash.Pistol:
+            case WeaponHash.PistolMk2:
+            case WeaponHash.CombatPistol:
+            case WeaponHash.APPistol:
+            case WeaponHash.SNSPistol:
+            case WeaponHash.SNSPistolMk2:
+            case WeaponHash.HeavyPistol:
+            case WeaponHash.VintagePistol:
+            case WeaponHash.MarksmanPistol:
+            case WeaponHash.Revolver:
+            case WeaponHash.RevolverMk2:
+            case WeaponHash.DoubleActionRevolver:
+            case WeaponHash.NavyRevolver:
+            case WeaponHash.CeramicPistol:
+                return true;
+
+            default:
+                return false;
+        }
+    }
+}
