@@ -19,7 +19,7 @@ namespace DisablePistolWhip
         [IniReflectorValue(sectionName: "Settings", defaultValue: "true", description: "If true, a notification will be shown when the mod is toggled on/off")]
         internal bool ShowNotification;
 
-        [IniReflectorValue(sectionName: "Settings", defaultValue: "Pistol,CombatPistol,APPistol", description: "Comma-separated list of WeaponHash names for which melee will be disabled (e.g. Pistol,CombatPistol,SMG)")]
+        [IniReflectorValue(sectionName: "Settings", defaultValue: "Pistol,CombatPistol,APPistol,StunGun", description: "Comma-separated list of WeaponHash names for which melee will be disabled (e.g. Pistol,CombatPistol,SMG,StunGun)")]
         internal string DisabledWeapons;
     }
 }
