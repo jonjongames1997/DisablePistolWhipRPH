@@ -6,7 +6,6 @@ Key features
 - Disable light/heavy/alternate melee controls when a pistol is equipped
 - Toggle at runtime via a console command or configurable keyboard key
 - Simple INI-based configuration created automatically on first run
-- No hard dependency on `System.Windows.Forms` — key handling validated at runtime when available
 
 Requirements
 - RagePluginHook
@@ -19,9 +18,9 @@ Installation
 Usage
 - By default the plugin is enabled. When a pistol is equipped the plugin disables melee attack controls so the player cannot pistol-whip while holding a pistol.
 - Console commands (type in the in-game console):
-  - `dpw` — Toggle the plugin on or off (state is persisted to `DisablePistolWhip.ini`).
-  - `dpw_setkey <KeyName>` — Change the keyboard toggle key (e.g. `dpw_setkey F8`). The key is stored as a string and validated at runtime if possible.
-  - `dpw_notify <true|false>` — Enable or disable in-game notifications.
+  - `dpw` â€” Toggle the plugin on or off (state is persisted to `DisablePistolWhip.ini`).
+  - `dpw_setkey <KeyName>` â€” Change the keyboard toggle key (e.g. `dpw_setkey F8`). The key is stored as a string and validated at runtime if possible.
+  - `dpw_notify <true|false>` â€” Enable or disable in-game notifications.
 
 Configuration
 - The plugin stores settings in `DisablePistolWhip.ini` next to the plugin DLL. Example contents:
@@ -34,6 +33,8 @@ Enabled=true
 ToggleKey=F7
 ; Notifications = true/false
 Notifications=true
+; Comma-separated list of WeaponHash names for which melee will be disabled (e.g. Pistol,CombatPistol,SMG)
+DisabledWeapons=Pistol,CombatPistol,APPistol,StunGun
 ```
 
 Notes
@@ -49,10 +50,11 @@ Contributing
 - Want to add features or fix a bug? Fork the repository, make changes, and open a pull request. Please include a short description of the change and, if appropriate, a changelog entry.
 
 License
-- No license file is included in this repository. Before publishing or distributing, add a license (MIT, Apache-2.0, etc.) as appropriate.
+- GPL-V3
 
 Credits
-- Plugin author: project metadata (assembly attributes)
+- Plugin author: JM Modifications
+- Ini Reflector: MarcelWRLD
 
 Contact
 - Use the project issue tracker or repository contact information for questions and support.
