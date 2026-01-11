@@ -4,7 +4,7 @@
 
 ### Added
 
-- Added StunGun as a default disabled weapon (will appear after initial INI generation).
+- None
 
 ### Changed
 
