@@ -32,7 +32,9 @@ namespace DisablePistolWhip
             ShowNotification($"Disable Pistol Whip: {(Enabled ? "Enabled" : "Disabled")} (Console toggle: dpw)");
 
             GameFiber.StartNew(PistolWhipService.MainLoop, "DisablePistolWhipFiber");
-            IniReflector<Config> iniReflector = new("Plugins/DisablePistolWhip.ini");
+            // Ensure the IniReflector uses the same config path as SaveConfig/LoadConfig so
+            // runtime changes (like setting the toggle key via command) persist correctly.
+            IniReflector<Config> iniReflector = new(ConfigPath);
             iniReflector.Read(UserConfig, true);
 
             while (true)
