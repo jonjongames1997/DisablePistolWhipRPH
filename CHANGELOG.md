@@ -14,7 +14,10 @@
 ### Fixed
 
 - Fixed config persistence for toggle key and notification settings when changed at runtime.
-- Minor cleanup: removed redundant try/catch blocks and improved logging for IO errors.
+
+### Patreon Support
+
+- If you enjoy this plugin and want to support development, consider becoming a patron: https://patreon.com/jonjongamesofficial
 
 
 ## [v1.0.1] - 2025-12-19 - Previous Release
