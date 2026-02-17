@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace YOUR_NAMESPACE;
+namespace DisablePistolWhip;
 
 internal class IniReflector<T> : IniReflector
 {
