@@ -55,11 +55,13 @@
     <Compile Include="IniReflector.cs" />
     <Compile Include="PistolWhipService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RageStubs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Changelog.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
