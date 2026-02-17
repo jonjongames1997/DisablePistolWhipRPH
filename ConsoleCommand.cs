@@ -57,5 +57,24 @@ namespace DisablePistolWhip
                 Game.LogTrivial($"[Disable Pistol Whip] dpw_notify error: {ex.Message}");
             }
         }
+
+        [ConsoleCommand(Description = "Add a weapon to the disabled weapons list (e.g. Pistol50, SMG, AssaultRifle)", Name = "dpw_addweapon")]
+        public static void AddWeapon(string weaponName)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(weaponName))
+                {
+                    Game.LogTrivial("[Disable Pistol Whip] dpw_addweapon requires a weapon name (e.g. Pistol50)");
+                    return;
+                }
+
+                EntryPoint.AddDisabledWeapon(weaponName.Trim());
+            }
+            catch (System.Exception ex)
+            {
+                Game.LogTrivial($"[Disable Pistol Whip] dpw_addweapon error: {ex.Message}");
+            }
+        }
     }
 }
