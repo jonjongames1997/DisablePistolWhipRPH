@@ -1,0 +1,64 @@
+﻿# Changelog
+
+## [v1.0.2.0] - 2026-02-17
+
+### Added
+
+- Added `dpw_addweapon` console command to dynamically add weapons to the disabled weapons list at runtime (e.g., `dpw_addweapon Pistol50`).
+- Weapon validation against the `WeaponHash` enum to prevent invalid entries.
+- Duplicate weapon detection in the disabled weapons list (case-insensitive check).
+- User feedback notifications when adding weapons or encountering errors.
+
+### Changed
+
+- Cleaned up `EntryPoint.cs` by removing duplicate `MainLoop()` method (now exclusively in `PistolWhipService.cs`).
+- Removed redundant infinite loop in `Main()` that checked toggle key (already handled in `PistolWhipService.MainLoop`).
+- Removed duplicate fields and helper methods from `EntryPoint.cs`: `_lastTogglePress`, `ToggleDebounceMs`, `DisabledWeaponHashes`, `DisabledWeaponsRaw`, `PistolHashes`, `IsPistol`, `ExpandWeaponEntry`, `FiberSleep` (all consolidated in `PistolWhipService`).
+- Improved code organization and separation of concerns by consolidating weapon-disabling logic into `PistolWhipService`.
+- Updated `IniReflector` to use the shared `ConfigPath` for consistent configuration persistence across all operations.
+
+### Fixed
+
+- Fixed configuration persistence when weapons are added via console command - changes now properly save to the INI file.
+- Improved error handling for weapon name validation and list operations.
+
+### Patreon Support
+
+- If you enjoy this plugin and want to support development, consider becoming a patron: https://patreon.com/jonjongamesofficial
+- Thank you to all supporters — your contributions help fund continued improvements and faster updates.
+
+---
+
+## [v1.0.1.1] - 2026-01-10
+
+### Added
+
+- None
+
+### Changed
+
+- None
+
+### Fixed
+
+- Fixed persistence of toggle key and notification settings when changed at runtime.
+- Improved IO-related logging and error messages for config operations.
+
+### Patreon Support
+
+- If you enjoy this plugin and want to support development, consider becoming a patron: https://patreon.com/jonjongamesofficial
+- Thank you to all supporters — your contributions help fund continued improvements and faster updates.
+
+---
+
+## [v1.0.1] - 2025-12-19 - Previous Release
+
+### Added
+
+- Added `StunGun` as a default disabled weapon (you can add more entries to the config; launch the plugin at least once to generate the INI).
+
+### Changed
+
+- Removed unnecessary try/catch blocks (thanks to Haze for the advice).
+- Separated the main loop into a separate C# class (thanks to Haze).
+- Now uses `System.Windows.Forms` for key handling and key names.
