@@ -2,7 +2,7 @@
 
 All notable changes to Disable Pistol Whip will be documented in this file.
 
-## [1.0.3.0] - 2026-03-17
+## [1.0.3.0] - 2026-03-18
 
 ### Added
 - **Damage Tracker Framework Integration**: Added support for Damage Tracker Framework API
