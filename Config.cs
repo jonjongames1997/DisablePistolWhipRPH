@@ -6,20 +6,16 @@ using DisablePistolWhip;
 
 namespace DisablePistolWhip
 {
-    // Credit to MarcelWRLD for the IniReflector system used in this mod. Check out his GitHub: https://github.com/Sprayxe/IniReflector
 
     internal class Config
     {
-        [IniReflectorValue(sectionName: "Keybinds", defaultValue: "F7", description: "The main key to toggle the mod off while mod is active/loaded in game")]
-        internal Keys ToggleKey;
+        internal Keys ToggleKey = Keys.F7;
+        internal bool StartEnabled = true;
+        internal bool ShowNotification = true;
+        internal string DisabledWeapons = "Pistol,CombatPistol,APPistol,StunGun";
+        internal bool CheckForUpdates = true;
+        internal string Language = "auto"; // "auto", "en-US", "es-ES", "fr-FR", "de-DE", etc.
 
-        [IniReflectorValue(sectionName: "Settings", defaultValue: "true", description: "If true, the mod will start enabled when loaded")]
-        internal bool StartEnabled;
-
-        [IniReflectorValue(sectionName: "Settings", defaultValue: "true", description: "If true, a notification will be shown when the mod is toggled on/off")]
-        internal bool ShowNotification;
-
-        [IniReflectorValue(sectionName: "Settings", defaultValue: "Pistol,CombatPistol,APPistol,StunGun", description: "Comma-separated list of WeaponHash names for which melee will be disabled (e.g. Pistol,CombatPistol,SMG,StunGun)")]
-        internal string DisabledWeapons;
+        public static readonly string PluginVersion = "1.0.3.0";
     }
 }
