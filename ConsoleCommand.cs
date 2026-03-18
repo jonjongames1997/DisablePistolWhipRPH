@@ -5,6 +5,8 @@ namespace DisablePistolWhip
 {
     public static class ConsoleCommand
     {
+        private static object current;
+
         [ConsoleCommand(Description = "Toggles the Disable Pistol Whip mod on or off.", Name = "dpw")]
         public static void Toggle()
         {
@@ -15,6 +17,42 @@ namespace DisablePistolWhip
             catch (System.Exception ex)
             {
                 Game.LogTrivial($"[Disable Pistol Whip] Console command error: {ex.Message}");
+            }
+        }
+
+        [ConsoleCommand(Description = "Check for plugin updates", Name = "dpw_update")]
+        public static void CheckUpdate()
+        {
+            try
+            {
+                Game.LogTrivial("[Disable Pistol Whip] Manually checking for updates...");
+                VersionChecker.IsUpdateAvailable();
+            }
+            catch (System.Exception ex)
+            {
+                Game.LogTrivial($"[Disable Pistol Whip] dpw_update error: {ex.Message}");
+            }
+        }
+
+        [ConsoleCommand(Description = "Display current version and update status", Name = "dpw_version")]
+        public static void ShowVersion()
+        {
+            try
+            {
+                
+                if (VersionChecker.IsUpdateAvailable())
+                {
+                    Game.LogTrivial($"[Disable Pistol Whip] Latest version: v{VersionChecker.LatestVersion}");
+                    Game.DisplayNotification($"~b~Disable Pistol Whip~w~\nCurrent: ~r~v{current}~w~\nLatest: ~g~v{VersionChecker.LatestVersion}");
+                }
+                else
+                {
+                    Game.DisplayNotification($"~g~Disable Pistol Whip v{current}~w~ (Up to date)");
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Game.LogTrivial($"[Disable Pistol Whip] dpw_version error: {ex.Message}");
             }
         }
 
@@ -75,6 +113,34 @@ namespace DisablePistolWhip
             {
                 Game.LogTrivial($"[Disable Pistol Whip] dpw_addweapon error: {ex.Message}");
             }
+        }
+
+        [ConsoleCommand(Description = "Display the config file path and verify it exists", Name = "dpw_path")]
+        public static void ShowPath()
+        {
+            try
+            {
+                EntryPoint.ShowConfigPath();
+            }
+            catch (System.Exception ex)
+            {
+                Game.LogTrivial($"[Disable Pistol Whip] dpw_path error: {ex.Message}");
+            }
+        }
+
+        [ConsoleCommand(Description = "Reset to default disabled weapons", Name = "dpw_reset")]
+        public static void ResetToDefaults()
+        {
+            // Reset all settings to default values
+            EntryPoint.UserConfig.DisabledWeapons = "Pistol,CombatPistol,APPistol,StunGun";
+            EntryPoint.SaveConfig();
+        }
+
+        [ConsoleCommand(Description = "View the list of disabled weapons", Name = "dpw_list")]
+        public static void ListWeapons()
+        {
+            // Display all currently disabled weapons in console
+            Game.LogTrivial("Disabled Weapons: " + EntryPoint.UserConfig.DisabledWeapons);
         }
     }
 }
