@@ -14,7 +14,7 @@ namespace DisablePistolWhip
     {
         internal static readonly Config UserConfig = new();
 
-        private static readonly string ConfigPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? ".", "DisablePistolWhip.ini");
+        private static readonly string ConfigPath = "Plugins/DisablePistolWhip.ini";
 
         public static bool Enabled { get; private set; } = true;
 
@@ -22,19 +22,23 @@ namespace DisablePistolWhip
         {
             Game.LogTrivial("[Disable Pistol Whip] Plugin loaded.");
             Game.DisplayNotification("char_molly", "char_molly", "Stella Dimentrescu", "Disable Pistol Whip", "by JM Modifications. Disable Pistol Whip ~g~successfully~w~ loaded. BE A THUG ABOUT IT, MAH BOI.");
-            EnsureConfigExists();
+            
             LoadConfig();
-            ShowNotification($"Disable Pistol Whip: {(Enabled ? "Enabled" : "Disabled")} (Console toggle: dpw)");
+            ShowNotification($"Disable Pistol Whip: {(Enabled ? "Enabled" : "Disabled")} (Console: dpw)");
 
             GameFiber.StartNew(PistolWhipService.MainLoop, "DisablePistolWhipFiber");
-            IniReflector<Config> iniReflector = new(ConfigPath);
-            iniReflector.Read(UserConfig, true);
+
+            VersionChecker.IsUpdateAvailable();
         }
 
         private static void LoadConfig()
         {
+            string fullPath = Path.GetFullPath(ConfigPath);
+            Game.LogTrivial($"[Disable Pistol Whip] Looking for config at: {fullPath}");
+            
             if (!File.Exists(ConfigPath))
             {
+                Game.LogTrivial("[Disable Pistol Whip] Config file not found, creating with default values.");
                 SaveConfig();
                 return;
             }
@@ -43,7 +47,7 @@ namespace DisablePistolWhip
             {
                 foreach (var line in File.ReadAllLines(ConfigPath))
                 {
-                    if (string.IsNullOrWhiteSpace(line))
+                    if (string.IsNullOrWhiteSpace(line) || line.TrimStart().StartsWith(";"))
                         continue;
 
                     var parts = line.Split(new[] { '=' }, 2);
@@ -58,17 +62,28 @@ namespace DisablePistolWhip
                         if (bool.TryParse(val, out var parsed))
                             Enabled = parsed;
                     }
-                    else if (key.Equals("ToggleKey", StringComparison.OrdinalIgnoreCase) || key.Equals("ToggleKeyName", StringComparison.OrdinalIgnoreCase))
+                    else if (key.Equals("ToggleKey", StringComparison.OrdinalIgnoreCase))
                     {
                         if (Enum.TryParse<Keys>(val, true, out var k))
                             UserConfig.ToggleKey = k;
                     }
-                    else if (key.Equals("Notifications", StringComparison.OrdinalIgnoreCase) || key.Equals("NotificationsEnabled", StringComparison.OrdinalIgnoreCase))
+                    else if (key.Equals("Notifications", StringComparison.OrdinalIgnoreCase))
                     {
                         if (bool.TryParse(val, out var parsed))
                             UserConfig.ShowNotification = parsed;
                     }
+                    else if (key.Equals("DisabledWeapons", StringComparison.OrdinalIgnoreCase))
+                    {
+                        UserConfig.DisabledWeapons = val;
+                    }
+                    else if (key.Equals("CheckForUpdates", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (bool.TryParse(val, out var parsed))
+                            UserConfig.CheckForUpdates = parsed;
+                    }
                 }
+
+                Game.LogTrivial("[Disable Pistol Whip] Config loaded successfully.");
             }
             catch (IOException ex)
             {
@@ -80,56 +95,47 @@ namespace DisablePistolWhip
             }
         }
 
-        private static void SaveConfig()
+        internal static void SaveConfig()
         {
-            string[] lines = new string[]
-            {
-                "; DisablePistolWhip configuration",
-                "; Enabled = true/false",
-                "Enabled=" + Enabled.ToString().ToLower(),
-                "; ToggleKey = name of key from System.Windows.Forms.Keys (e.g. F7)",
-                "ToggleKey=" + UserConfig.ToggleKey.ToString(),
-                "; Notifications = true/false (show in-game notifications)",
-                "Notifications=" + UserConfig.ShowNotification.ToString().ToLower(),
-                "; DisabledWeapons = comma-separated list of weapon names or categories (pistol, smg, rifles, shotguns)",
-                "DisabledWeapons=" + UserConfig.DisabledWeapons,
-            };
-
             try
             {
-                File.WriteAllLines(ConfigPath, lines);
-            }
-            catch (IOException ex)
-            {
-                Game.LogTrivial($"[Disable Pistol Whip] SaveConfig IO error: {ex.Message}");
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                Game.LogTrivial($"[Disable Pistol Whip] SaveConfig access error: {ex.Message}");
-            }
-        }
+                string fullPath = Path.GetFullPath(ConfigPath);
+                string directory = Path.GetDirectoryName(fullPath);
+                
+                if (!Directory.Exists(directory))
+                {
+                    Game.LogTrivial($"[Disable Pistol Whip] Creating directory: {directory}");
+                    Directory.CreateDirectory(directory);
+                }
+                
+                string[] lines = new string[]
+                {
+                    "; DisablePistolWhip Configuration",
+                    "; Visit LCPDFR.com for support",
+                    "",
+                    "; Enable or disable the plugin",
+                    "Enabled=" + Enabled.ToString().ToLower(),
+                    "",
+                    "; Key to toggle the plugin on/off (System.Windows.Forms.Keys)",
+                    "ToggleKey=" + UserConfig.ToggleKey.ToString(),
+                    "",
+                    "; Show in-game notifications",
+                    "Notifications=" + UserConfig.ShowNotification.ToString().ToLower(),
+                    "",
+                    "; Check for updates on plugin load",
+                    "CheckForUpdates=" + UserConfig.CheckForUpdates.ToString().ToLower(),
+                    "",
+                    "; Comma-separated list of WeaponHash names",
+                    "; Use 'dpw_preset' command or the in-game menu to quickly change presets",
+                    "DisabledWeapons=" + (UserConfig.DisabledWeapons ?? "Pistol,CombatPistol,APPistol,StunGun"),
+                };
 
-        private static void EnsureConfigExists()
-        {
-            if (!File.Exists(ConfigPath))
+                File.WriteAllLines(ConfigPath, lines);
+                Game.LogTrivial($"[Disable Pistol Whip] Config saved successfully to: {fullPath}");
+            }
+            catch (Exception ex)
             {
-                try
-                {
-                    File.WriteAllLines(ConfigPath, new[]
-                    {
-                        "; DisablePistolWhip configuration",
-                        "; Set Enabled to true or false and save the file",
-                        "Enabled=true"
-                    });
-                }
-                catch (IOException ex)
-                {
-                    Game.LogTrivial($"[Disable Pistol Whip] EnsureConfigExists IO error: {ex.Message}");
-                }
-                catch (UnauthorizedAccessException ex)
-                {
-                    Game.LogTrivial($"[Disable Pistol Whip] EnsureConfigExists access error: {ex.Message}");
-                }
+                Game.LogTrivial($"[Disable Pistol Whip] SaveConfig error: {ex.GetType().Name} - {ex.Message}");
             }
         }
 
@@ -164,6 +170,7 @@ namespace DisablePistolWhip
                 UserConfig.ToggleKey = parsed;
                 SaveConfig();
                 ShowNotification($"Toggle key set to: {UserConfig.ToggleKey}");
+                Game.LogTrivial($"[Disable Pistol Whip] Toggle key changed to: {UserConfig.ToggleKey}");
             }
             else
             {
@@ -190,7 +197,6 @@ namespace DisablePistolWhip
 
             var trimmed = weaponName.Trim();
 
-            // Validate that the weapon name is a valid WeaponHash
             if (!Enum.TryParse<WeaponHash>(trimmed, true, out var weaponHash))
             {
                 Game.LogTrivial($"[Disable Pistol Whip] Invalid weapon name: {trimmed}");
@@ -198,14 +204,12 @@ namespace DisablePistolWhip
                 return;
             }
 
-            // Get current disabled weapons list
             var currentWeapons = string.IsNullOrWhiteSpace(UserConfig.DisabledWeapons)
                 ? new System.Collections.Generic.List<string>()
                 : UserConfig.DisabledWeapons.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(w => w.Trim())
                     .ToList();
 
-            // Check if weapon already exists in the list (case-insensitive)
             if (currentWeapons.Any(w => w.Equals(trimmed, StringComparison.OrdinalIgnoreCase)))
             {
                 Game.LogTrivial($"[Disable Pistol Whip] Weapon already in disabled list: {trimmed}");
@@ -213,15 +217,22 @@ namespace DisablePistolWhip
                 return;
             }
 
-            // Add the new weapon
             currentWeapons.Add(trimmed);
             UserConfig.DisabledWeapons = string.Join(",", currentWeapons);
-
-            // Persist to INI
             SaveConfig();
 
             Game.LogTrivial($"[Disable Pistol Whip] Added weapon to disabled list: {trimmed}");
             ShowNotification($"Added {trimmed} to disabled weapons");
+        }
+
+        public static void ShowConfigPath()
+        {
+            string fullPath = Path.GetFullPath(ConfigPath);
+            bool exists = File.Exists(ConfigPath);
+            
+            Game.LogTrivial($"[Disable Pistol Whip] Config path: {fullPath}");
+            Game.LogTrivial($"[Disable Pistol Whip] File exists: {exists}");
+            Game.DisplayNotification($"Config: {fullPath} (Exists: {exists})");
         }
     }
 }
