@@ -1,18 +1,26 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Script Projects\\DisablePistolWhipRPH\\",
+  "WorkspaceRootPath": "D:\\Script Projects\\DisablePistolWhip\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{05CD81FF-A391-41CE-8296-B8CF754DB41A}|DisablePistolWhip.csproj|d:\\script projects\\disablepistolwhiprph\\changelog.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{05CD81FF-A391-41CE-8296-B8CF754DB41A}|DisablePistolWhip.csproj|solutionrelative:changelog.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{05CD81FF-A391-41CE-8296-B8CF754DB41A}|DisablePistolWhip.csproj|d:\\script projects\\disablepistolwhip\\readme.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
+      "RelativeMoniker": "D:0:0:{05CD81FF-A391-41CE-8296-B8CF754DB41A}|DisablePistolWhip.csproj|solutionrelative:readme.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{05CD81FF-A391-41CE-8296-B8CF754DB41A}|DisablePistolWhip.csproj|D:\\Script Projects\\DisablePistolWhipRPH\\entrypoint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{05CD81FF-A391-41CE-8296-B8CF754DB41A}|DisablePistolWhip.csproj|D:\\Script Projects\\DisablePistolWhip\\entrypoint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{05CD81FF-A391-41CE-8296-B8CF754DB41A}|DisablePistolWhip.csproj|solutionrelative:entrypoint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{05CD81FF-A391-41CE-8296-B8CF754DB41A}|DisablePistolWhip.csproj|d:\\script projects\\disablepistolwhiprph\\properties\\assemblyinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{05CD81FF-A391-41CE-8296-B8CF754DB41A}|DisablePistolWhip.csproj|solutionrelative:properties\\assemblyinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{05CD81FF-A391-41CE-8296-B8CF754DB41A}|DisablePistolWhip.csproj|d:\\script projects\\disablepistolwhip\\consolecommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{05CD81FF-A391-41CE-8296-B8CF754DB41A}|DisablePistolWhip.csproj|solutionrelative:consolecommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Script Projects\\DisablePistolWhip\\CHANGELOG.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CHANGELOG.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{05CD81FF-A391-41CE-8296-B8CF754DB41A}|DisablePistolWhip.csproj|d:\\script projects\\disablepistolwhip\\localization.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{05CD81FF-A391-41CE-8296-B8CF754DB41A}|DisablePistolWhip.csproj|solutionrelative:localization.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -28,27 +36,53 @@
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "EntryPoint.cs",
-              "DocumentMoniker": "D:\\Script Projects\\DisablePistolWhipRPH\\EntryPoint.cs",
+              "DocumentMoniker": "D:\\Script Projects\\DisablePistolWhip\\EntryPoint.cs",
               "RelativeDocumentMoniker": "EntryPoint.cs",
-              "ToolTip": "D:\\Script Projects\\DisablePistolWhipRPH\\EntryPoint.cs",
+              "ToolTip": "D:\\Script Projects\\DisablePistolWhip\\EntryPoint.cs",
               "RelativeToolTip": "EntryPoint.cs",
-              "ViewState": "AgIAAM8AAAAAAAAAAAAAAOIAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAALIAAAAAAAAAAAAAANkAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-16T10:31:28.997Z",
+              "WhenOpened": "2026-03-18T00:36:32.995Z",
               "IsPinned": true,
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Changelog.txt",
-              "DocumentMoniker": "D:\\Script Projects\\DisablePistolWhipRPH\\Changelog.txt",
-              "RelativeDocumentMoniker": "Changelog.txt",
-              "ToolTip": "D:\\Script Projects\\DisablePistolWhipRPH\\Changelog.txt",
-              "RelativeToolTip": "Changelog.txt",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAaAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2026-02-17T05:08:43.821Z",
+              "Title": "README.md",
+              "DocumentMoniker": "D:\\Script Projects\\DisablePistolWhip\\README.md",
+              "RelativeDocumentMoniker": "README.md",
+              "ToolTip": "D:\\Script Projects\\DisablePistolWhip\\README.md",
+              "RelativeToolTip": "README.md",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADoAAABcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2026-04-20T17:41:14.995Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ConsoleCommand.cs",
+              "DocumentMoniker": "D:\\Script Projects\\DisablePistolWhip\\ConsoleCommand.cs",
+              "RelativeDocumentMoniker": "ConsoleCommand.cs",
+              "ToolTip": "D:\\Script Projects\\DisablePistolWhip\\ConsoleCommand.cs",
+              "RelativeToolTip": "ConsoleCommand.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAAIgAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-20T17:35:14.375Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "CHANGELOG.md",
+              "DocumentMoniker": "D:\\Script Projects\\DisablePistolWhip\\CHANGELOG.md",
+              "RelativeDocumentMoniker": "CHANGELOG.md",
+              "ToolTip": "D:\\Script Projects\\DisablePistolWhip\\CHANGELOG.md",
+              "RelativeToolTip": "CHANGELOG.md",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2026-04-20T17:34:27.392Z",
               "EditorCaption": ""
             },
             {
@@ -69,15 +103,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "AssemblyInfo.cs",
-              "DocumentMoniker": "D:\\Script Projects\\DisablePistolWhipRPH\\Properties\\AssemblyInfo.cs",
-              "RelativeDocumentMoniker": "Properties\\AssemblyInfo.cs",
-              "ToolTip": "D:\\Script Projects\\DisablePistolWhipRPH\\Properties\\AssemblyInfo.cs",
-              "RelativeToolTip": "Properties\\AssemblyInfo.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAhAAAAAAAAAA==",
+              "DocumentIndex": 4,
+              "Title": "Localization.cs",
+              "DocumentMoniker": "D:\\Script Projects\\DisablePistolWhip\\Localization.cs",
+              "RelativeDocumentMoniker": "Localization.cs",
+              "ToolTip": "D:\\Script Projects\\DisablePistolWhip\\Localization.cs",
+              "RelativeToolTip": "Localization.cs",
+              "ViewState": "AgIAANIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-19T06:55:30.065Z",
+              "WhenOpened": "2026-03-18T00:46:37.104Z",
               "EditorCaption": ""
             }
           ]

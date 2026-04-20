@@ -1,0 +1,16 @@
+﻿# Changelog
+
+## [Unreleased] - 2025-12-19
+
+### Added
+
+- Added StunGun as a default disabledweapon (You can add more to the config (If not exist, launch the plugin at least once for it to generate the ini).)
+
+### Changed
+
+- Removed unnecessary try catches (Thanks to Haze for the advice)
+
+- Seperated the main loop into a seperate C# class (Thanks to Haze)
+
+- It now uses the System.Windows.Forms
+

@@ -1,0 +1,36 @@
+﻿# Changelog
+
+All notable changes to this project are documented in this file.
+
+The format is based on Keep a Changelog (https://keepachangelog.com/) and follows Semantic Versioning.
+
+## [Unreleased] - 2025-12-19
+
+### Added
+- `CHANGELOG.md` file to track project changes.
+- (Add any new features here.)
+
+### Changed
+- (List notable changes to existing functionality here.)
+
+### Fixed
+- (List bug fixes here.)
+
+---
+
+## Example Release Notes
+
+### [v0.1.0] - 2025-01-01
+
+#### Added
+- Initial project scaffolding.
+
+#### Fixed
+- Resolved example null-reference when loading configuration (replace with real fixes).
+
+---
+
+How to use
+- Replace the placeholder items in the `Unreleased` section with concrete entries describing the change, affected components, and references to issue/PR numbers if available.
+- When cutting a release, move the `Unreleased` items under a new version heading with the release date.
+
