@@ -11,9 +11,9 @@ Requirements
 - RagePluginHook
 
 Installation
-1. Build the project or download the compiled DLL.
-2. Place the DLL into your scripts/mods folder used by your Rage scripting loader.
-3. Launch the game; the plugin will create `DisablePistolWhip.ini` next to the DLL on first run.
+1. Download the zip file and extract the file
+2. Place the DLL and PDB into your 'plugins' folder
+3. Launch the game and open the Rage Console then load the plugin -- the plugin will create `DisablePistolWhip.ini` next to the DLL on first run.
 
 Usage
 - By default the plugin is enabled. When a pistol is equipped the plugin disables melee attack controls so the player cannot pistol-whip while holding a pistol.
@@ -54,7 +54,6 @@ License
 
 Credits
 - Plugin author: JM Modifications
-- Ini Reflector: MarcelWRLD
 
 Contact
 - Use the project issue tracker or repository contact information for questions and support.
