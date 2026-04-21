@@ -2,6 +2,10 @@
 
 All notable changes to Disable Pistol Whip will be documented in this file.
 
+## [1.0.3.1] - 2026-04-21
+
+- Added 15 more humorous messages to make it a total of 30 random humorous messages
+
 ## [1.0.3.0] - 2026-04-20
 
 ### Added
