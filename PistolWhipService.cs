@@ -40,7 +40,22 @@ namespace DisablePistolWhip
             "~o~Achievement Unlocked: ~w~\"Persistent Button Masher\"",
             "~r~You're determined, I'll give you that. ~w~Still ~y~no~w~.",
             "~g~The definition of insanity ~w~is trying the same thing and expecting different results.",
-            "~p~Stella is watching you struggle. ~w~Pistol whip = ~r~OFF~w~."
+            "~p~Stella is watching you struggle. ~w~Pistol whip = ~r~OFF~w~.",
+            "~r~Spam ~w~detected! This ain't ~y~Dark Souls~w~, pal.",
+            "~p~Press F to pay respects... ~w~to your failed pistol whip attempt.",
+            "~b~Task failed successfully: ~w~You've mastered the art of ~r~not~w~ pistol whipping.",
+            "~g~Congratulations! ~w~You've discovered a feature that's ~r~turned off~w~.",
+            "~r~Breaking News: ~w~Local criminal can't figure out pistol whip is disabled.",
+            "~y~Did you really think the 47th attempt would work differently?",
+            "~p~Plot twist: ~w~It's still disabled. ~r~Shocking~w~, I know.",
+            "~r~ERROR 403: ~w~Pistol whip access ~y~forbidden~w~.",
+            "~o~FATAL ERROR: ~w~Brain.exe has stopped working. Pistol whip still ~r~disabled~w~.",
+            "~y~You know I have 15+ messages, right? ~w~Wanna see them all?",
+            "~r~You shall not pass! ~w~- Gandalf, and also this plugin.",
+            "~r~NOPE.",
+            "~y~Still no. ~w~Moving on...",
+            "~g~Oh, you're ~y~still~w~ here? Pistol whip is ~r~still~w~ disabled.",
+            "~r~One more time for the people in the back: ~w~IT'S ~y~DISABLED~w~.",
         };
 
         static PistolWhipService()
