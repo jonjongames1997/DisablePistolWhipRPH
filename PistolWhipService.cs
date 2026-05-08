@@ -56,6 +56,7 @@ namespace DisablePistolWhip
             "~y~Still no. ~w~Moving on...",
             "~g~Oh, you're ~y~still~w~ here? Pistol whip is ~r~still~w~ disabled.",
             "~r~One more time for the people in the back: ~w~IT'S ~y~DISABLED~w~.",
+            "~r~ERROR 404~w~: This is not ~y~Red Dead Redemption 2~w~, Broski! Pistol Whipping ain't happening.",
         };
 
         static PistolWhipService()
