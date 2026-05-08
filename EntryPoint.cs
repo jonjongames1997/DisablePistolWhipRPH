@@ -111,7 +111,7 @@ namespace DisablePistolWhip
                 string[] lines = new string[]
                 {
                     "; DisablePistolWhip Configuration",
-                    "; Visit LCPDFR.com for support",
+                    "; For support, Join the Discord: https://discord.gg/N9KgZx4KUn",
                     "",
                     "; Enable or disable the plugin",
                     "Enabled=" + Enabled.ToString().ToLower(),
@@ -223,6 +223,21 @@ namespace DisablePistolWhip
 
             Game.LogTrivial($"[Disable Pistol Whip] Added weapon to disabled list: {trimmed}");
             ShowNotification($"Added {trimmed} to disabled weapons");
+        }
+
+        public static void RemoveDisabledWeapon(string weaponName)
+        {
+            if (string.IsNullOrWhiteSpace(weaponName))
+                return;
+
+            var weapons = UserConfig.DisabledWeapons?.Split(',') ?? new string[0];
+            var updatedWeapons = weapons
+                .Select(w => w.Trim())
+                .Where(w => !w.Equals(weaponName, StringComparison.OrdinalIgnoreCase))
+                .ToArray();
+
+            UserConfig.DisabledWeapons = string.Join(",", updatedWeapons);
+            SaveConfig();
         }
 
         public static void ShowConfigPath()
