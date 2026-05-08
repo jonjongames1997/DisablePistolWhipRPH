@@ -16,6 +16,6 @@ namespace DisablePistolWhip
         internal bool CheckForUpdates = true;
         internal string Language = "auto"; // "auto", "en-US", "es-ES", "fr-FR", "de-DE", etc.
 
-        public static readonly string PluginVersion = "1.0.3.0";
+        public static readonly string PluginVersion = "1.0.4.2";
     }
 }
