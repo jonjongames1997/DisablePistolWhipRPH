@@ -131,7 +131,6 @@ namespace DisablePistolWhip
         [ConsoleCommand(Description = "Reset to default disabled weapons", Name = "dpw_reset")]
         public static void ResetToDefaults()
         {
-            // Reset all settings to default values
             EntryPoint.UserConfig.DisabledWeapons = "Pistol,CombatPistol,APPistol,StunGun";
             EntryPoint.SaveConfig();
         }
@@ -139,8 +138,26 @@ namespace DisablePistolWhip
         [ConsoleCommand(Description = "View the list of disabled weapons", Name = "dpw_list")]
         public static void ListWeapons()
         {
-            // Display all currently disabled weapons in console
             Game.LogTrivial("Disabled Weapons: " + EntryPoint.UserConfig.DisabledWeapons);
+        }
+
+        [ConsoleCommand(Description = "Remove a weapon from the disabled weapons list (e.g. Pistol50)", Name = "dpw_removeweapon")]
+        public static void RemoveWeapon(string weaponName)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(weaponName))
+                {
+                    Game.LogTrivial("[Disable Pistol Whip] dpw_removeweapon requires a weapon name (e.g. Pistol50)");
+                    return;
+                }
+
+                EntryPoint.RemoveDisabledWeapon(weaponName.Trim());
+            }
+            catch (System.Exception ex)
+            {
+                Game.LogTrivial($"[Disable Pistol Whip] dpw_removeweapon error: {ex.Message}");
+            }
         }
     }
 }
