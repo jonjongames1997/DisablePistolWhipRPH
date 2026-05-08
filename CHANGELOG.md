@@ -2,6 +2,11 @@
 
 All notable changes to Disable Pistol Whip will be documented in this file.
 
+## [1.0.4.2] - 2026-05-09
+
+- Added 1 new humorous message for immersive gameplay
+- Added a new console command to remove a weapon from the disabled weapon list without having to edit the ini.
+
 ## [1.0.3.1] - 2026-04-21
 
 - Added 15 more humorous messages to make it a total of 30 random humorous messages
