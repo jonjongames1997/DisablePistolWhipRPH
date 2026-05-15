@@ -13,7 +13,7 @@ namespace DisablePistolWhip
         public static bool IsUpdateAvailable()
         {
             string curVersion = Config.PluginVersion;
-            Uri latestVersionUri = new("https://www.lcpdfr.com/applications/downloadsng/interface/api.php?do=checkForUpdates&fileId=52806&textOnly=1");
+            Uri latestVersionUri = new("https://api-prod.lcpdfr.com/api/downloadsng/files/52806/version");
             WebClient webClient = new();
             string recievedData;
             try
